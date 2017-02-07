@@ -39,20 +39,22 @@
 					<thead>
 						<tr>
 							<th>Name</th>
+							<th>ID</th>
 							<th>Enabled</th>
 							<th>Status</th>
-							<th>MH/s Average</th>
-							<th>MH/s 5s</th>
+							<th>TH/s Average</th>
+							<th>TH/s 5s</th>
 							<th>Accepted</th>
 							<th>Rejected</th>
 							<th>Hardware Errors</th>
-							<th>Utility</th>
-							<th>Intensity</th>
+							<th>Temperature</th>
+							<th>Fan Speed</th>
 						</tr>
 					</thead>
 					<tbody>
 	 					{{range .Devs.Devs}}<tr>
 						    <td>{{.GPU}}</td>
+						    <td>{{.ID}}</td>
 						    <td>{{.Enabled}}</td>
 						    <td>{{.Status}}
 							<td>{{.MHSAv}}</td>
@@ -60,13 +62,13 @@
 							<td>{{.Accepted}}</td>
 							<td>{{.Rejected}}</td>
 							<td>{{.HardwareErrors}}</td>
-							<td>{{.Utility}}</td>
-							<td>{{.Intensity}}</td>
+							<td>{{.Temperature}}C</td>
+							<td>{{.FanSpeed}}RPM</td>
 				    	</tr>{{end}}
 					</tbody>
 				</table>
-				<h3>GPU Information</h3>
-				<table class="table">
+				<h3 class="hide">Hashboard Information</h3>
+				<table class="table hide">
 					<thead>
 						<tr>
 							<th>Name</th>

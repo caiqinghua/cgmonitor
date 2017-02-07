@@ -23,9 +23,9 @@ type Client struct {
 }
 
 //Main function for fetching information from one client
-func rpcClient(name, ip string, refInt int, minerInfo *MinerInformation, wg *sync.WaitGroup, threshold float64) {
+func rpcClient(name, ip string, refreshInterval int, minerInfo *MinerInformation, wg *sync.WaitGroup, threshold float64) {
 	//Add everything except the connection
-	c := Client{name, ip, nil, refInt, minerInfo, nil, threshold, int(time.Now().Unix())}
+	c := Client{name, ip, nil, refreshInterval, minerInfo, nil, threshold, int(time.Now().Unix())}
 	//Save the Client struct in the MinerInfo
 	c.MinerInfo.Client = &c
 
@@ -105,7 +105,7 @@ func SummaryHandler(res chan<- RpcRequest, minerInfo *MinerInformation, c *Clien
 			}
 
 			//Update the summaryrow
-			summaryRow = MinerRow{c.Name, summary.Summary[0].Accepted, summary.Summary[0].Rejected, summary.Summary[0].MHSAv, summary.Summary[0].BestShare}
+			summaryRow = MinerRow{c.Name, summary.Summary[0].Accepted, summary.Summary[0].LocalWork, (summary.Summary[0].MHSAv)/1000/1000, summary.Summary[0].BestShare}
 		} else {
 			//No response so wait somee extra before try again
 			log.Println("Failed to fetch new data from " + c.Name)
@@ -410,7 +410,8 @@ type DevsResponse struct {
 }
 
 type DevObject struct {
-	GPU                 int     `json:"GPU"`
+	GPU                 string  `json:"Name"`
+	ID                  int     `json:"ID"`
 	Enabled             string  `json:"Enabled"`
 	Status              string  `json:"Status"`
 	Temperature         float64 `json:"Temperature"`
@@ -452,7 +453,10 @@ func (devs *DevsResponse) Parse(response []byte) {
 			//Get the variable
 			var dev = &devs.Devs[i]
 			//Make the comparison
-			if dev.Enabled == "Y" {
+      dev.MHSAv = dev.MHSAv/1000/1000
+      dev.MHS5s = dev.MHS5s/1000/1000
+      dev.TotalMH = dev.TotalMH/1000/1000
+      if dev.Enabled == "Y" {
 				dev.OnOff = true
 			} else {
 				dev.OnOff = false
