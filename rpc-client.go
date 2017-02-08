@@ -9,11 +9,13 @@ import (
 	"net"
 	"sync"
 	"time"
+  "strings"
 )
 
 type Client struct {
 	Name             string            //Name of the miner
 	IP               string            //Ip to the cgminer including port
+  IpWithoutPort    string
 	Conn             net.Conn          //Connection made with net.Dial
 	RefreshInterval  int               //Seconds between fetching information
 	MinerInfo        *MinerInformation //Struct to put the answers for the webserver
@@ -24,8 +26,14 @@ type Client struct {
 
 //Main function for fetching information from one client
 func rpcClient(name, ip string, refreshInterval int, minerInfo *MinerInformation, wg *sync.WaitGroup, threshold float64) {
+  ipWithoutPort := "127.0.0.1"
+  ipSlices := strings.Split(ip, ":")
+  for _, val := range ipSlices {
+    ipWithoutPort = val
+    break
+  }
 	//Add everything except the connection
-	c := Client{name, ip, nil, refreshInterval, minerInfo, nil, threshold, int(time.Now().Unix())}
+	c := Client{name, ip, ipWithoutPort, nil, refreshInterval, minerInfo, nil, threshold, int(time.Now().Unix())}
 	//Save the Client struct in the MinerInfo
 	c.MinerInfo.Client = &c
 
@@ -90,8 +98,8 @@ func SummaryHandler(res chan<- RpcRequest, minerInfo *MinerInformation, c *Clien
 	//Signal that the thread is started
 	wg.Done()
 
-	for {
-		summary := SummaryResponse{[]StatusObject{StatusObject{}}, []SummaryObject{SummaryObject{}}, 0}
+  for {
+    summary := SummaryResponse{[]StatusObject{StatusObject{}}, []SummaryObject{SummaryObject{}}, 0}
 		res <- request
 		response = <-request.ResultChan
 
@@ -105,11 +113,11 @@ func SummaryHandler(res chan<- RpcRequest, minerInfo *MinerInformation, c *Clien
 			}
 
 			//Update the summaryrow
-			summaryRow = MinerRow{c.Name, summary.Summary[0].Accepted, summary.Summary[0].LocalWork, (summary.Summary[0].MHSAv)/1000/1000, summary.Summary[0].BestShare}
+			summaryRow = MinerRow{c.Name, summary.Summary[0].Accepted, summary.Summary[0].Rejected, (summary.Summary[0].MHSAv)/1000/1000, summary.Summary[0].BestShare, c.IpWithoutPort}
 		} else {
 			//No response so wait somee extra before try again
 			log.Println("Failed to fetch new data from " + c.Name)
-			summaryRow = MinerRow{c.Name, 0, 0, 0, 0}
+			summaryRow = MinerRow{c.Name, 0, 0, 0, 0, c.IpWithoutPort}
 		}
 		//Lock it
 		minerInfo.SumWrap.Mu.Lock()

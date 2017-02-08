@@ -40,6 +40,7 @@ func MinerHandler(w http.ResponseWriter, r *http.Request) {
 
 	miner := MinerWrapper{}
 	miner.Name = key
+  miner.IP = miners[key].Client.IpWithoutPort
 
 	//Get the array that hold the information about the devs
 	miners[key].DevsWrap.Mu.RLock()
@@ -202,6 +203,7 @@ func GPUHandler(w http.ResponseWriter, r *http.Request) {
 
 type MinerWrapper struct {
 	Name string
+  IP   string
 	Devs DevsResponse
 }
 
@@ -219,4 +221,5 @@ type MinerRow struct {
 	Rejected  int
 	MHSAv     float64
 	BestShare int
+  IP        string
 }

@@ -44,6 +44,7 @@
 								<th>Rejected</th>
 								<th>TH/s Average</th>
 								<th>Best Share</th>
+								<th>IP</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -53,7 +54,8 @@
 								<td>{{.Rejected}}</td>
 								<td>{{.MHSAv}}</td>
 								<td>{{.BestShare}}</td>
-					    	</tr>{{end}}
+                <td><a href="https://{{.IP}}" title="Local controller {{.Name}}">{{.IP}}</a></td>
+                </tr>{{end}}
 						</tbody>
 					</table>
 				</div>
