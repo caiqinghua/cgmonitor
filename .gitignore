@@ -1,3 +1,10 @@
+*.exe
 cgmonitor.log
 monitor.log
 cgmonitor.conf
+bitmicro-miner-monitor-linux-amd64
+bitmicro-miner-monitor-linux-i386
+bitmicro-miner-monitor-macos-amd64
+bitmicro-miner-monitor-macos-i386
+*.zip
+btmonitor
