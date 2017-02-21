@@ -53,7 +53,7 @@ var miners map[string]*MinerInformation
 
 func main() {
 	//Open the log file
-	logf, err := os.OpenFile("cgmonitor.log", os.O_RDWR|os.O_APPEND|os.O_CREATE, 0640)
+	logf, err := os.OpenFile("monitor.log", os.O_RDWR|os.O_APPEND|os.O_CREATE, 0640)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -78,7 +78,7 @@ func main() {
 	var config Config
 
 	//Read the config file
-	b, err := ioutil.ReadFile("cgmonitor.conf")
+	b, err := ioutil.ReadFile("monitor.conf")
 	if err != nil {
 		panic(err)
 	}
@@ -117,7 +117,7 @@ func main() {
 //Check of the there is a config.toml file is the same folder as the program is runned from
 //If not it will create one
 func configExists() {
-	if _, err := os.Stat("cgmonitor.conf"); err != nil {
+	if _, err := os.Stat("monitor.conf"); err != nil {
 		if os.IsNotExist(err) {
 			// file does not exist
 			log.Println("No config file found, creating example config file.")
@@ -141,7 +141,7 @@ func createExampleConf() {
 	}
 
 	//And save it to file
-	err = ioutil.WriteFile("cgmonitor.conf", b, 0644)
+	err = ioutil.WriteFile("monitor.conf", b, 0644)
 	if err != nil {
 		panic(err)
 	}
