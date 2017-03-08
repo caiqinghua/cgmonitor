@@ -8,3 +8,4 @@ bitmicro-miner-monitor-macos-amd64
 bitmicro-miner-monitor-macos-i386
 *.zip
 btmonitor
+cgmonitor
