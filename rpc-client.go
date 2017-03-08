@@ -113,11 +113,11 @@ func SummaryHandler(res chan<- RpcRequest, minerInfo *MinerInformation, c *Clien
 			}
 
 			//Update the summaryrow
-			summaryRow = MinerRow{c.Name, summary.Summary[0].Accepted, summary.Summary[0].Rejected, (summary.Summary[0].MHSAv)/1000/1000, summary.Summary[0].BestShare, c.IpWithoutPort}
+			summaryRow = MinerRow{c.Name, summary.Summary[0].Accepted, summary.Summary[0].Rejected, (summary.Summary[0].MHSAv)/1000/1000, summary.Summary[0].BestShare, c.IpWithoutPort, summary.Summary[0].FanSpeedIn, summary.Summary[0].FanSpeedOut}
 		} else {
 			//No response so wait somee extra before try again
 			log.Println("Failed to fetch new data from " + c.Name)
-			summaryRow = MinerRow{c.Name, 0, 0, 0, 0, c.IpWithoutPort}
+			summaryRow = MinerRow{c.Name, 0, 0, 0, 0, c.IpWithoutPort, 0, 0}
 		}
 		//Lock it
 		minerInfo.SumWrap.Mu.Lock()
@@ -161,7 +161,7 @@ func DevsHandler(res chan<- RpcRequest, minerInfo *MinerInformation, c *Client, 
 //checkTresHold = true if it should check if the miner is below the threshold set for the miner
 func UpdateDevs(name string, checkTresHold bool) (ok bool) {
 	ok = false
-	request := RpcRequest{"{\"command\":\"devs\"}", make(chan []byte), name}
+	request := RpcRequest{"{\"command\":\"edevs\"}", make(chan []byte), name}
 
 	minerInfo := miners[name]
 
@@ -406,6 +406,8 @@ type SummaryObject struct {
 	DifficultyRejected float64 `json:"Difficulty Rejected"`
 	DifficultyStale    float64 `json:"Difficulty Stale"`
 	BestShare          int     `json:"Best Share"`
+	FanSpeedIn         int     `json:"Fan Speed In"`
+	FanSpeedOut        int     `json:"Fan Speed Out"`
 }
 
 //////////
@@ -423,7 +425,8 @@ type DevObject struct {
 	Enabled             string  `json:"Enabled"`
 	Status              string  `json:"Status"`
 	Temperature         float64 `json:"Temperature"`
-	FanSpeed            int     `json:"Fan Speed"`
+	FanSpeedIn          int     `json:"Fan Speed In"`
+	FanSpeedOut         int     `json:"Fan Speed Out"`
 	FanPercent          int     `json:"Fan Percent"`
 	GPUClock            int     `json:"GPU Clock"`
 	MemoryClock         int     `json:"Memory Clock"`
@@ -456,6 +459,8 @@ func (devs *DevsResponse) Parse(response []byte) {
 		if err != nil {
 			fmt.Println(err.Error())
 		}
+
+        //fmt.Println(devs)
 		//Set the onoff boolean for every device
 		for i := 0; i < len(devs.Devs); i++ {
 			//Get the variable

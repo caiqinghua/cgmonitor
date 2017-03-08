@@ -43,7 +43,9 @@
 								<th>Accepted</th>
 								<th>Rejected</th>
 								<th>TH/s Average</th>
-								<th>Best Share</th>
+                                <th>Best Share</th>
+                                <th>Fan Speed In</th> 
+                                <th>Fan Speed Out</th> 
 								<th>IP</th>
 							</tr>
 						</thead>
@@ -54,6 +56,8 @@
 								<td>{{.Rejected}}</td>
 								<td>{{.MHSAv}}</td>
 								<td>{{.BestShare}}</td>
+								<td>{{.FanSpeedIn}}</td>
+								<td>{{.FanSpeedOut}}</td>
                 <td><a href="https://{{.IP}}" title="Local controller {{.Name}}">{{.IP}}</a></td>
                 </tr>{{end}}
 						</tbody>

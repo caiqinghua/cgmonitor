@@ -33,7 +33,19 @@
 		      	</div>
 		    </div>
 			<div class="row-fluid">
-				<h2>{{.Name}} <a href="https://{{.IP}}" title="Local controller {{.Name}}">{{.IP}}</a></h2>
+                <h2>{{.Name}} <a href="https://{{.IP}}" title="Local controller {{.Name}}">{{.IP}}</a></h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Fan Speed In</th>
+                            <th>Fan Speed Out</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <td>{{.FanSpeedIn}}</td>
+                        <td>{{.FanSpeedOut}}</td>
+                    </tbody>
+				</table>
   				<h3>Detailed info</h3>
 				<table class="table">
 					<thead>
@@ -48,7 +60,6 @@
 							<th>Rejected</th>
 							<th>Hardware Errors</th>
 							<th>Temperature</th>
-							<th>Fan Speed</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -63,7 +74,6 @@
 							<td>{{.Rejected}}</td>
 							<td>{{.HardwareErrors}}</td>
 							<td>{{.Temperature}}C</td>
-							<td>{{.FanSpeed}}RPM</td>
 				    	</tr>{{end}}
 					</tbody>
 				</table>

@@ -47,6 +47,11 @@ func MinerHandler(w http.ResponseWriter, r *http.Request) {
 	miner.Devs = miners[key].DevsWrap.Devs
 	miners[key].DevsWrap.Mu.RUnlock()
 	//fmt.Printf("Onoff: %s\n", miner.Devs.Devs[0].OnOff)
+    for i := 0; i < len(miner.Devs.Devs); i++ {
+        var dev = &miner.Devs.Devs[i]
+        miner.FanSpeedIn = dev.FanSpeedIn
+        miner.FanSpeedOut = dev.FanSpeedOut
+    }
 
 	err := templates.ExecuteTemplate(w, "miner.html", miner)
 	if err != nil {
@@ -203,7 +208,9 @@ func GPUHandler(w http.ResponseWriter, r *http.Request) {
 
 type MinerWrapper struct {
 	Name string
-  IP   string
+    IP   string
+    FanSpeedIn int
+    FanSpeedOut int
 	Devs DevsResponse
 }
 
@@ -221,5 +228,7 @@ type MinerRow struct {
 	Rejected  int
 	MHSAv     float64
 	BestShare int
-  IP        string
+    IP        string
+    FanSpeedIn int
+    FanSpeedOut int
 }
