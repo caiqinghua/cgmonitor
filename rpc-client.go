@@ -113,11 +113,11 @@ func SummaryHandler(res chan<- RpcRequest, minerInfo *MinerInformation, c *Clien
 			}
 
 			//Update the summaryrow
-			summaryRow = MinerRow{c.Name, summary.Summary[0].Accepted, summary.Summary[0].Rejected, (summary.Summary[0].MHSAv)/1000/1000, summary.Summary[0].BestShare, c.IpWithoutPort, summary.Summary[0].FanSpeedIn, summary.Summary[0].FanSpeedOut}
+			summaryRow = MinerRow{c.Name, summary.Summary[0].Elapsed/60, summary.Summary[0].Accepted, summary.Summary[0].Rejected, (summary.Summary[0].MHSAv)/1000/1000, summary.Summary[0].BestShare, c.IpWithoutPort, summary.Summary[0].FanSpeedIn, summary.Summary[0].FanSpeedOut}
 		} else {
 			//No response so wait somee extra before try again
 			log.Println("Failed to fetch new data from " + c.Name)
-			summaryRow = MinerRow{c.Name, 0, 0, 0, 0, c.IpWithoutPort, 0, 0}
+			summaryRow = MinerRow{c.Name, 0, 0, 0, 0, 0, c.IpWithoutPort, 0, 0}
 		}
 		//Lock it
 		minerInfo.SumWrap.Mu.Lock()

@@ -45,6 +45,7 @@ func MinerHandler(w http.ResponseWriter, r *http.Request) {
 	//Get the array that hold the information about the devs
 	miners[key].DevsWrap.Mu.RLock()
 	miner.Devs = miners[key].DevsWrap.Devs
+	miner.Devs.Devs = sortDevs(miner.Devs.Devs, "Name")
 	miners[key].DevsWrap.Mu.RUnlock()
 	//fmt.Printf("Onoff: %s\n", miner.Devs.Devs[0].OnOff)
     for i := 0; i < len(miner.Devs.Devs); i++ {
@@ -108,6 +109,7 @@ func createMinersTemplate() MinersTemplate {
 		//Unlock it
 		minerStructTemp.SumWrap.Mu.RUnlock()
 	}
+	rows = sortRows(rows, "MHSAv");
 	return MinersTemplate{rows}
 }
 
@@ -224,6 +226,7 @@ type MinersTemplate struct {
 
 type MinerRow struct {
 	Name      string
+	Elapsed   int
 	Accepted  int
 	Rejected  int
 	MHSAv     float64

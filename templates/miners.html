@@ -40,6 +40,7 @@
 						<thead>
 							<tr>
 								<th>Name</th>
+								<th>Elapsed(Min)</th>
 								<th>Accepted</th>
 								<th>Rejected</th>
 								<th>TH/s Average</th>
@@ -52,6 +53,7 @@
 						<tbody>
 		 					{{range .Rows}}<tr>
 							    <td><a href="/miner/{{.Name}}" title="More information about {{.Name}}">{{.Name}}</a></td>
+							    <td>{{.Elapsed}}</td>
 							    <td>{{.Accepted}}</td>
 								<td>{{.Rejected}}</td>
 								<td>{{.MHSAv}}</td>
