@@ -425,6 +425,7 @@ type DevObject struct {
 	Enabled             string  `json:"Enabled"`
 	Status              string  `json:"Status"`
 	Temperature         float64 `json:"Temperature"`
+	ChipFrequency       int     `json:"Chip Frequency"`
 	FanSpeedIn          int     `json:"Fan Speed In"`
 	FanSpeedOut         int     `json:"Fan Speed Out"`
 	FanPercent          int     `json:"Fan Percent"`
